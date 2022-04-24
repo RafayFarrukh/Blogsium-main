@@ -1,6 +1,6 @@
 import React from "react";
+
 import Navbar from "./Navbar";
-import Landing3 from "../img/Landing3.jpg";
 
 const Blogs = () => {
   return (

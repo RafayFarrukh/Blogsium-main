@@ -4,22 +4,26 @@ import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import logo5 from "../img/logo5.jpeg";
 import Navbar from "./Navbar";
-import { useState } from "react";
+import { useContext, useRef } from "react";
+import { Context } from "../context/Context";
+import axios from "axios";
 
 const Login = () => {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    setSubmitting(true);
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setSubmitting(false);
-      return;
-    }
-    console.log({ name, password });
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const { dispatch, isFetching, error } = useContext(Context);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "LOGIN_START" });
+    axios
+      .post("http://localhost:5000/api/user/login", {
+        name: usernameRef.current.value,
+        password: passwordRef.current.value,
+      })
+      .then((resp) => {
+        dispatch({ type: "LOGIN_SUCCESS", payload: resp.data });
+      })
+      .catch(() => dispatch({ type: "LOGIN_FAILURE" }));
   };
   return (
     <>
@@ -47,9 +51,8 @@ const Login = () => {
                   <input
                     name="name"
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     required
+                    ref={usernameRef}
                     className="
             block
             w-full
@@ -73,8 +76,7 @@ const Login = () => {
                   <input
                     name="password"
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    ref={passwordRef}
                     className="
             block
             w-full
@@ -96,7 +98,7 @@ const Login = () => {
                 <div className="mb-6">
                   <button
                     type="submit"
-                    {...(submitting ? { disabled: true } : {})}
+                    disabled={isFetching}
                     className="
             h-10
             px-5
@@ -112,8 +114,10 @@ const Login = () => {
                   >
                     Login
                   </button>
+                  {error && (
+                    <label style={{ color: "red" }}>Wrong credentials ⚠️</label>
+                  )}
                 </div>
-                <div></div>
               </form>
             </div>
           </div>

@@ -3,29 +3,31 @@ import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-
 import logo5 from "../img/logo5.jpeg";
-import Navbar from "./Navbar";
-const Signup = () => {
-  // const navigate = useNavigate();
+import axios from "axios";
 
-  const [name, setName] = useState("");
+import Navbar from "./Navbar";
+
+const Signup = () => {
+  const [name, setname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+  const [resp, setResp] = useState("");
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    setSubmitting(true);
-    event.preventDefault();
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      return;
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log({ name, email, password });
+    axios
+      .post("http://localhost:5000/api/user/register", {
+        name,
+        email,
+        password,
+      })
+      .then((resp) => setResp(resp))
+      .catch((err) => setError(true));
   };
-
+  setTimeout(() => resp && window.location.replace("/login"), 3000);
   return (
     <>
       <Navbar />
@@ -53,9 +55,8 @@ const Signup = () => {
                   <input
                     name="name"
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     required
+                    onChange={(e) => setname(e.target.value)}
                     className="
             block
             w-full
@@ -72,6 +73,7 @@ const Signup = () => {
                     placeholder="User name"
                   />
                 </label>
+
                 <label className="block mb-6">
                   <EmailIcon />
                   <span className="text-gray-700 ml-2 font-bold">
@@ -81,7 +83,6 @@ const Signup = () => {
                   <input
                     name="email"
                     type="email"
-                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="
             block
@@ -105,7 +106,6 @@ const Signup = () => {
                   <input
                     name="password"
                     type="password"
-                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="
             block
@@ -128,7 +128,6 @@ const Signup = () => {
                 <div className="mb-6">
                   <button
                     type="submit"
-                    {...(submitting ? { disabled: true } : {})}
                     className="
             h-10
             px-5
@@ -144,6 +143,16 @@ const Signup = () => {
                   >
                     Sign Up
                   </button>
+                  {resp && (
+                    <label style={{ color: "green" }}>
+                      Registration Successful redirecting to Login page....
+                    </label>
+                  )}
+                  {error && (
+                    <label style={{ color: "red" }}>
+                      Something went wrong ⚠️
+                    </label>
+                  )}
                 </div>
                 <div></div>
               </form>

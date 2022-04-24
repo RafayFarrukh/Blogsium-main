@@ -12,11 +12,6 @@ const ArticleSchema = new Schema({
     type: String,
   },
 
-  // using cloudinary for uploading images
-  cloudinaryId: {
-    type: String,
-  },
-
   body: {
     type: String,
     required: [true, "Please enter something"],
@@ -32,25 +27,6 @@ const ArticleSchema = new Schema({
     type: Date,
     required: true,
   },
-  likes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  comments: [
-    {
-      name: {
-        type: String,
-      },
-      comment: {
-        type: String,
-      },
-      date: {
-        type: Date,
-      },
-    },
-  ],
 });
 
 export default mongoose.model("Article", ArticleSchema);
