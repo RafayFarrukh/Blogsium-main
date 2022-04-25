@@ -1,7 +1,7 @@
 import React from "react";
-// import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
-import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+
 import logo5 from "../img/logo5.jpeg";
 import Navbar from "./Navbar";
 import { useContext, useRef } from "react";
@@ -9,7 +9,7 @@ import { Context } from "../context/Context";
 import axios from "axios";
 
 const Login = () => {
-  const usernameRef = useRef();
+  const emailRef = useRef();
   const passwordRef = useRef();
   const { dispatch, isFetching, error } = useContext(Context);
   const handleSubmit = async (e) => {
@@ -17,7 +17,7 @@ const Login = () => {
     dispatch({ type: "LOGIN_START" });
     axios
       .post("http://localhost:5000/api/user/login", {
-        name: usernameRef.current.value,
+        email: emailRef.current.value,
         password: passwordRef.current.value,
       })
       .then((resp) => {
@@ -43,16 +43,15 @@ const Login = () => {
               </h1>
               <form method="POST" action="" onSubmit={handleSubmit}>
                 <label className="block mb-6">
-                  <PersonIcon />
-                  <span className="text-gray-700  ml-2 mt-10 font-bold">
-                    User Name
+                  <EmailIcon />
+                  <span className="text-gray-700 ml-2 font-bold">
+                    {" "}
+                    Email address
                   </span>
-
                   <input
-                    name="name"
-                    type="text"
-                    required
-                    ref={usernameRef}
+                    name="email"
+                    ref={emailRef}
+                    type="email"
                     className="
             block
             w-full
@@ -65,11 +64,10 @@ const Login = () => {
             focus:ring-indigo-200
             focus:ring-opacity-50
           "
-                    minLength="6"
-                    placeholder="User name"
+                    placeholder="Email"
+                    required
                   />
                 </label>
-
                 <label className="block mb-6">
                   <LockIcon />
                   <span className="text-gray-700 ml-2 font-bold">Password</span>

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import logo5 from "../img/logo5.jpeg";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../context/Context";
+
+import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./Navbar.css";
@@ -11,6 +14,13 @@ const Navbar = () => {
   };
   const closeMenu = () => {
     setNavbarOpen(false);
+  };
+  const { user, dispatch } = useContext(Context);
+  const location = useLocation();
+  const handleLogout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
   };
   return (
     <>
@@ -90,6 +100,12 @@ const Navbar = () => {
                     Signup
                   </Link>
                 </li>
+                <Link
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  to=""
+                >
+                  {user && <li onClick={handleLogout}>Logout</li>}
+                </Link>
               </ul>
             </button>
             <div className="hidden w-full md:block md:w-auto" id="mobile-menu">
@@ -103,6 +119,16 @@ const Navbar = () => {
                     Home
                   </Link>
                 </li>
+
+                <li className="ml-20">
+                  <Link
+                    to="/create"
+                    className="block py-2  pr-4 pl-3 text-gray-700 border-b border-yellow-100 hover:bg-yellow-500 md:hover:bg-transparent md:border-0 md:hover:text-yellow-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    {user && <li className="listItem">Create Blog</li>}
+                  </Link>
+                </li>
+
                 <li>
                   <Link
                     to="/blogs"
@@ -111,14 +137,7 @@ const Navbar = () => {
                     Blogs
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/blogs"
-                    className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-yellow-400 md:hover:bg-yellow-400 md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                  >
-                    Services
-                  </Link>
-                </li>
+
                 <li>
                   <Link
                     to="/login"
@@ -135,6 +154,12 @@ const Navbar = () => {
                     Signup
                   </Link>
                 </li>
+                <Link
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  to=""
+                >
+                  {user && <li onClick={handleLogout}>Logout</li>}
+                </Link>
               </ul>
             </div>
           </div>

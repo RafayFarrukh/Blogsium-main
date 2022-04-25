@@ -5,7 +5,7 @@ import Aboutus from "./components/Aboutus";
 import Login from "./components/Login";
 import Blogs from "./components/Blogs";
 import { useContext } from "react";
-
+import CreateBlog from "./pages/createBlog";
 import { Context } from "./context/Context";
 
 function App() {
@@ -21,6 +21,11 @@ function App() {
           exact
           path="login"
           element={user ? <LandingPage /> : <Login />}
+        />
+        <Route
+          exact
+          path="create"
+          element={user ? <CreateBlog /> : <Login />}
         />
         <Route exact path="blogs" element={<Blogs />} />
         <Route exact path="aboutus" element={<Aboutus />} />
