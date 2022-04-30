@@ -1,14 +1,10 @@
-import validateArticle from "../validation/articles.js";
 import Article from "../models/Article.js";
-import Jwt from "jsonwebtoken";
 
+import ValidateArticle from "../validation/validation_article.js";
 const createArticle = async (req, res) => {
-  const { errors, isValid } = validateArticle(req.body);
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
   try {
     const article = await Article.create(req.body);
+
     res.status(201).json({ article });
   } catch (error) {
     res.status(404).json({ msg: "error hai" });
@@ -59,4 +55,59 @@ const updateArticle = async (req, res) => {
     res.status(404).json({ error: "error in updating" });
   }
 };
-export { createArticle, getAllArticle, getById, deleteArticle, updateArticle };
+const likeArticle = async (req, res) => {
+  Article.findByIdAndUpdate(
+    req.params.id,
+    { $push: { likes: req.params.id } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+};
+const unlikeArticle = async (req, res) => {
+  Article.findByIdAndUpdate(
+    req.params.id,
+    { $pull: { likes: req.params.id } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+};
+const commentArticle = async (req, res) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.params.id,
+  };
+  Article.findByIdAndUpdate(
+    req.params.id,
+    { $push: { comments: comment } },
+    { new: true }
+  )
+    .populate("comments.postedBy", "_id name")
+    .populate("postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+};
+export {
+  createArticle,
+  getAllArticle,
+  getById,
+  deleteArticle,
+  updateArticle,
+  likeArticle,
+  unlikeArticle,
+  commentArticle,
+};

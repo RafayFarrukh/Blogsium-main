@@ -1,32 +1,49 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
+const { ObjectId } = mongoose.Schema.Types;
 
-const ArticleSchema = new Schema({
-  title: {
-    type: String,
-    required: [true, "Please provide title"],
-    trim: true,
-  },
+import joi from "joi";
+const ArticleSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Please provide title"],
+      trim: true,
+    },
 
-  image: {
-    type: String,
-  },
+    image: {
+      type: String,
+      // required: true,
+    },
+    author: {
+      type: String,
+      // required: [true, "Please provide Author"],
+      maxlength: 30,
+      minlength: 3,
+      trim: true,
+    },
 
-  body: {
-    type: String,
-    required: [true, "Please enter something"],
+    body: {
+      type: String,
+      required: [true, "Please enter something"],
+    },
+    // likes: [
+    //   {
+    //     type: ObjectId,
+    //     ref: "User",
+    //   },
+    // ],
+    // comments: [
+    //   {
+    //     text: "String",
+    //     postedBy: { type: ObjectId, ref: "User" },
+    //   },
+    // ],
+    created_at: {
+      type: Date,
+    },
   },
-  author: {
-    type: String,
-    required: [true, "Please provide Author"],
-    maxlength: 30,
-    minlength: 3,
-    trim: true,
-  },
-  created_at: {
-    type: Date,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export default mongoose.model("Article", ArticleSchema);

@@ -1,130 +1,206 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../context/Context";
+import { Link } from "react-router-dom";
 
 import Navbar from "./Navbar";
-
 const Blogs = () => {
+  const { user, dispatch } = useContext(Context);
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/articles/all", {
+      headers: {
+        Authorization: "token" + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        setData(result.posts);
+      });
+  }, []);
+  // if (loading) {
+  //   return <p>Data is loading...</p>;
+  // }
+  const likePost = (id) => {
+    fetch("http://localhost:5000/api/articles/like", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        postId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        const newData = data.map((item) => {
+          if (item._id == result._id) {
+            return result;
+          } else {
+            return item;
+          }
+        });
+        setData(newData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const unlikePost = (id) => {
+    fetch("http://localhost:5000/api/articles/unlike", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        postId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        const newData = data.map((item) => {
+          if (item._id == result._id) {
+            return result;
+          } else {
+            return item;
+          }
+        });
+        setData(newData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const makeComment = (text, postId) => {
+    fetch("http://localhost:5000/api/articles/comment", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        postId,
+        text: text,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        const newData = data.map((item) => {
+          if (item._id == result._id) {
+            return result;
+          } else {
+            return item;
+          }
+        });
+        setData(newData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deletePost = (postid) => {
+    fetch(`http://localhost:5000/api/articles/delete/${postid}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        const newData = data.filter((item) => {
+          return item._id !== result._id;
+        });
+        setData(newData);
+      });
+  };
+
   return (
-    <div>
+    <>
       <Navbar />
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-3 mb-6">
-        <div class="border-b sm:border-none pb-4 sm:pb-0">
-          <img
-            src="https://preview.colorlib.com/theme/magdesign/images/ximg_2.jpg.pagespeed.ic.fbbBEgB1Q6.webp"
-            alt=""
-            class="rounded-lg"
-          />
+      <div className="home">
+        {(data || []).map((item) => {
+          return (
+            <div className="card home-card">
+              <h5 style={{ padding: "5px" }}>
+                <Link
+                  to={
+                    item.postedBy._id !== user._id
+                      ? "/profile/" + item.postedBy._id
+                      : "/profile"
+                  }
+                >
+                  {item.postedBy.name}
+                  {item.postedBy._id == user._id && (
+                    <i
+                      class="material-icons"
+                      style={{ float: "right" }}
+                      onClick={() => deletePost(item._id)}
+                    >
+                      delete
+                    </i>
+                  )}
+                </Link>
+              </h5>
+              <div className="card-image">
+                <img src={item.photo} />
+              </div>
+              <div className="card-content">
+                <i className="material-icons" style={{ color: "red" }}>
+                  favorite
+                </i>
+                {item.likes.includes(user._id) ? (
+                  <i
+                    className="material-icons"
+                    onClick={() => {
+                      unlikePost(item._id);
+                    }}
+                  >
+                    thumb_down
+                  </i>
+                ) : (
+                  <i
+                    className="material-icons"
+                    onClick={() => {
+                      likePost(item._id);
+                    }}
+                  >
+                    thumb_up
+                  </i>
+                )}
 
-          <div class="flex space-x-4 mt-6">
-            <div class="flex text-sm font-semibold space-x-2">
-              <h6 class="font-thin">Business, Travel</h6>
-              <span>—</span>
-              <p class="font-thin text-gray-500">7th July, 2021</p>
+                <h6>{item.likes.length}</h6>
+                <p>{item.body}</p>
+                {item.comments.map((record) => {
+                  return (
+                    <h6 key={record._id}>
+                      <span style={{ fontWeight: "500" }}>
+                        {record.postedBy.name}
+                      </span>
+                      {record.text}
+                    </h6>
+                  );
+                })}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    makeComment(e.target[0].value, item._id);
+                  }}
+                >
+                  <input type="text" placeholder="add comment" />
+                </form>
+              </div>
             </div>
-          </div>
-
-          <h2 class="py-1 text-xl font-bold">
-            Your most unhappy customers are your greatest source of learning.
-          </h2>
-
-          <p class="mb-6 mt-2 text-gray-700">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam
-            eum quisquam aspernatur iusto ratione ad inventore deserunt
-            velit....
-          </p>
-
-          <div class="flex space-x-2">
-            <img
-              src="https://preview.colorlib.com/theme/magdesign/images/xperson_1.jpg.pagespeed.ic.Zebptmx_f8.webp"
-              alt=""
-              class="rounded-full w-10 h-10"
-            />
-
-            <div>
-              <h4 class="font-semibold">Rafay Farrukh</h4>
-              <p class="text-sm text-gray-500">CEO and Founder of Blogsium</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-b sm:border-none pb-4 sm:pb-0">
-          <img
-            src="https://preview.colorlib.com/theme/magdesign/images/ximg_2.jpg.pagespeed.ic.fbbBEgB1Q6.webp"
-            alt=""
-            class="rounded-lg"
-          />
-
-          <div class="flex space-x-4 mt-6">
-            <div class="flex text-sm font-semibold space-x-2">
-              <h6 class="font-thin">Business, Travel</h6>
-              <span>—</span>
-              <p class="font-thin text-gray-500">7th July, 2021</p>
-            </div>
-          </div>
-
-          <h2 class="py-1 text-xl font-bold">
-            Your most unhappy customers are your greatest source of learning.
-          </h2>
-
-          <p class="mb-6 mt-2 text-gray-700">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam
-            eum quisquam aspernatur iusto ratione ad inventore deserunt
-            velit....
-          </p>
-
-          <div class="flex space-x-2">
-            <img
-              src="https://preview.colorlib.com/theme/magdesign/images/xperson_1.jpg.pagespeed.ic.Zebptmx_f8.webp"
-              alt=""
-              class="rounded-full w-10 h-10"
-            />
-
-            <div>
-              <h4 class="font-semibold">Rafay Farrukh</h4>
-              <p class="text-sm text-gray-500">CEO and Founder of Blogsium</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-b sm:border-none pb-4 sm:pb-0">
-          <img
-            src="https://preview.colorlib.com/theme/magdesign/images/ximg_3.jpg.pagespeed.ic.TsSrvxpHvJ.webp"
-            alt=""
-            class="rounded-lg"
-          />
-
-          <div class="flex space-x-4 mt-6">
-            <div class="flex text-sm font-semibold space-x-2">
-              <h6 class="font-thin">Business, Travel</h6>
-              <span>—</span>
-              <p class="font-thin text-gray-500">7th July, 2021</p>
-            </div>
-          </div>
-
-          <h2 class="py-1 text-xl font-bold">
-            Your most unhappy customers are your greatest source of learning.
-          </h2>
-
-          <p class="mb-6 mt-2 text-gray-700">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam
-            eum quisquam aspernatur iusto ratione ad inventore deserunt
-            velit....
-          </p>
-
-          <div class="flex space-x-2">
-            <img
-              src="https://preview.colorlib.com/theme/magdesign/images/xperson_1.jpg.pagespeed.ic.Zebptmx_f8.webp"
-              alt=""
-              class="rounded-full w-10 h-10"
-            />
-
-            <div>
-              <h4 class="font-semibold">Rafay Farrukh</h4>
-              <p class="text-sm text-gray-500">CEO and Founder of Blogsium</p>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-    </div>
+    </>
   );
 };
 

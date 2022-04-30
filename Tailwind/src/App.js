@@ -5,8 +5,10 @@ import Aboutus from "./components/Aboutus";
 import Login from "./components/Login";
 import Blogs from "./components/Blogs";
 import { useContext } from "react";
-import CreateBlog from "./pages/createBlog";
+// import CreateBlog from "./pages/createBlog";
 import { Context } from "./context/Context";
+import Create from "./pages/Create";
+import Single from "./pages/Single";
 
 function App() {
   const { user } = useContext(Context);
@@ -22,13 +24,10 @@ function App() {
           path="login"
           element={user ? <LandingPage /> : <Login />}
         />
-        <Route
-          exact
-          path="create"
-          element={user ? <CreateBlog /> : <Login />}
-        />
+        <Route exact path="create" element={user ? <Create /> : <Login />} />
         <Route exact path="blogs" element={<Blogs />} />
         <Route exact path="aboutus" element={<Aboutus />} />
+        <Route exact path="/post/:postId" element={<Single />} />
       </Routes>
     </BrowserRouter>
   );

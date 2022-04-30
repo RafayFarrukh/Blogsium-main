@@ -7,6 +7,7 @@ import path from "path";
 import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -22,12 +23,6 @@ app.get("/", (req, res) => {
   res.send("welcome to backend of Blogsium");
 });
 
-app.use("/images", express.static(path.join(__dirname, "/images")));
-app.use("/api/articles", articles);
-app.use("/api/user", auth);
-app.use(notFoundRoute);
-
-//uploading image
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -45,6 +40,12 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   });
 });
 
+app.use("/images", express.static(path.join(__dirname, "/images")));
+
+app.use("/api/articles", articles);
+app.use("/api/user", auth);
+app.use(notFoundRoute);
+
 const port = process.env.PORT || 5000;
 
 const server = async () => {
@@ -52,7 +53,6 @@ const server = async () => {
     await dbConnect(
       "mongodb+srv://rafayfarrukh:rafay123@cluster0.kpr56.mongodb.net/Blogsium?retryWrites=true&w=majority"
     );
-    // will create separate file for keys and port later
     app.listen(port, () => {
       console.log(`server is listening on port ${port}`);
     });

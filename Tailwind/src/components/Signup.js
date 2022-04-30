@@ -17,7 +17,6 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, email, password });
     axios
       .post("http://localhost:5000/api/user/register", {
         name,
