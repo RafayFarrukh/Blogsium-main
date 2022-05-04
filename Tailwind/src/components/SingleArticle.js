@@ -56,13 +56,13 @@ const SingleArticle = () => {
       <div>
         {post.image && (
           <img
-            className="postImage"
+            className="postImage  block h-auto w-full overflow-hidden rounded-lg shadow-lg"
             src={ImageLink + post.image + ".jpg"}
             alt="mmmmmmm"
           />
         )}
       </div>
-      <h1 className="postTitle">
+      <h1 className="postTitle no-underline  text-black text-lg font-bold">
         {title}
         {user?.username === post.username && (
           <div className="EditButtons">
@@ -83,7 +83,9 @@ const SingleArticle = () => {
         </span>
         <span className="Date">{new Date(post.createdAt).toDateString()}</span>
       </div>
-      <div className="postDescription">{body}</div>
+      <div className="postDescription flex items-center justify-between leading-tight  md:p-4">
+        {body}
+      </div>
     </div>
   );
 };
