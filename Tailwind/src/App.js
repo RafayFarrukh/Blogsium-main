@@ -27,7 +27,7 @@ function App() {
         <Route exact path="create" element={user ? <Create /> : <Login />} />
         <Route exact path="blogs" element={<Blogs />} />
         <Route exact path="aboutus" element={<Aboutus />} />
-        <Route exact path="/post/:postId" element={<Single />} />
+        <Route exact path="post/:postId" element={<Single />} />
       </Routes>
     </BrowserRouter>
   );

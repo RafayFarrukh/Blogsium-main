@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
@@ -17,12 +17,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    blogs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Blog",
-      },
-    ],
+    // blogs: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Blog",
+    //   },
+    // ],
   },
   { collection: "user-data" }
 );

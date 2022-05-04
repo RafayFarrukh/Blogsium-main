@@ -15,17 +15,18 @@ const ArticleSchema = new Schema(
       type: String,
       // required: true,
     },
-    author: {
-      type: String,
-      // required: [true, "Please provide Author"],
-      maxlength: 30,
-      minlength: 3,
-      trim: true,
-    },
 
     body: {
       type: String,
       required: [true, "Please enter something"],
+    },
+    // author: {
+    //   type: String,
+    //   // required: [true, "Please provide Author"],
+    // },
+    username: {
+      type: String,
+      // required: true,
     },
     // likes: [
     //   {

@@ -11,8 +11,8 @@ const Create = () => {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    const newPost = {
-      author: user.author,
+    const newpost = {
+      username: user.username,
       title: title,
       body: body,
     };
@@ -21,7 +21,7 @@ const Create = () => {
       const fileName = Date.now() + file.name;
       data.append("name", fileName);
       data.append("file", file);
-      newPost.image = fileName;
+      newpost.image = fileName;
       await axios
         .post("http://localhost:5000/api/upload", data)
         .catch((err) => {
@@ -29,7 +29,7 @@ const Create = () => {
         });
     }
     await axios
-      .post("http://localhost:5000/api/articles/create", newPost)
+      .post("http://localhost:5000/api/articles/create", newpost)
       .then((resp) => window.location.replace("/post/" + resp.data.article._id))
       .catch((err) => {
         console.log("error in posting article");
@@ -39,7 +39,11 @@ const Create = () => {
     <div>
       <Navbar />
       {file && (
-        <img className="uploadedImage" src={URL.createObjectURL(file)} alt="" />
+        <img
+          className="uploadedImage h-96 w-96 mt-10 mr-10 float-right"
+          src={URL.createObjectURL(file)}
+          alt=""
+        />
       )}
       <form onSubmit={handlePost}>
         <div className="bg-indigo-50 min-h-screen md:px-20 pt-6">
@@ -86,7 +90,7 @@ const Create = () => {
                   rows="10"
                   //   value={body}
                   onChange={(e) => setbody(e.target.value)}
-                  placeholder="whrite here.."
+                  placeholder="Write here.."
                   className="w-full font-serif  p-4 text-gray-600 bg-indigo-50 outline-none rounded-md"
                 ></textarea>
               </div>

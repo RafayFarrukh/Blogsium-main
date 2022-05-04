@@ -31,8 +31,27 @@ const loginUser = async (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(401).send({ error: "Inavlid credentials" });
   }
-  const token = user.createJWT();
+  // const token = user.createJWT();
   user.password = undefined;
-  res.status(201).json({ user, token });
+  // res.status(201).json({ user, token });
+  res.status(201).json({ user });
 };
+
+// const loginUser = async (req, res) => {
+//   const { name, password } = req.body;
+//   if (!name || !password) {
+//     return res.status(400).send({ error: "Provide all values" });
+//   }
+//   const user = await User.findOne({ name }).select("+password");
+//   if (!user) {
+//     return res.status(400).send({ error: "Inavlid credentials" });
+//   }
+//   const isPasswordCorrect = await user.comparePassword(password);
+//   if (!isPasswordCorrect) {
+//     return res.status(401).send({ error: "Inavlid credentials" });
+//   }
+//   const token = user.createJWT();
+//   user.password = undefined;
+//   res.status(201).json({ user, token });
+// };
 export { registerUser, loginUser };

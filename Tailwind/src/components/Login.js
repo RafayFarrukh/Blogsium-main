@@ -1,7 +1,7 @@
 import React from "react";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
-
+// import PersonIcon from "@mui/icons-material/Person";
 import logo5 from "../img/logo5.jpeg";
 import Navbar from "./Navbar";
 import { useContext, useRef } from "react";
@@ -42,6 +42,34 @@ const Login = () => {
                 Login
               </h1>
               <form method="POST" action="" onSubmit={handleSubmit}>
+                {/* <label className="block mb-6">
+                  <PersonIcon />
+                  <span className="text-gray-700  ml-2 mt-10 font-bold">
+                    User Name
+                  </span>
+
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    ref={nameRef}
+                    className="
+            block
+            w-full
+            mt-1
+            border-gray-300
+            rounded-md
+            shadow-sm
+            focus:border-indigo-300
+            focus:ring
+            focus:ring-indigo-200
+            focus:ring-opacity-50
+          "
+                    minlength="6"
+                    placeholder="User name"
+                  />
+                </label> */}
+
                 <label className="block mb-6">
                   <EmailIcon />
                   <span className="text-gray-700 ml-2 font-bold">
