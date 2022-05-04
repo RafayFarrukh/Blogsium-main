@@ -11,7 +11,7 @@ const Create = () => {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    const newpost = {
+    const newPost = {
       username: user.username,
       title: title,
       body: body,
@@ -21,7 +21,7 @@ const Create = () => {
       const fileName = Date.now() + file.name;
       data.append("name", fileName);
       data.append("file", file);
-      newpost.image = fileName;
+      newPost.image = fileName;
       await axios
         .post("http://localhost:5000/api/upload", data)
         .catch((err) => {
@@ -29,8 +29,9 @@ const Create = () => {
         });
     }
     await axios
-      .post("http://localhost:5000/api/articles/create", newpost)
-      .then((resp) => window.location.replace("/post/" + resp.data.article._id))
+      .post("http://localhost:5000/api/articles/create", newPost)
+      .then((resp) => window.location.replace("/post/" + resp.data.post._id))
+      .then((res) => console.log(res.data))
       .catch((err) => {
         console.log("error in posting article");
       });

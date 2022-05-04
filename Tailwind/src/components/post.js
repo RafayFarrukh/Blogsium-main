@@ -1,7 +1,7 @@
 const { Link } = require("react-router-dom");
 
 const Post = ({ data }) => {
-  const ImageLink = "http://localhost:8000/images/";
+  const ImageLink = "http://localhost:5000/images/";
   return (
     <div className="Posts">
       {data.image && (
@@ -20,12 +20,12 @@ const Post = ({ data }) => {
           ))} */}
         </div>
         <Link className="link" to={`/post/${data._id}`}>
-          <span className="title"> {data.title} </span>
+          <span className="title text-bold"> {data.title} </span>
         </Link>
 
         <hr />
         <span className="postDate">
-          {new Date(data.created_at).toDateString()}
+          {new Date(data.createdAt).toDateString()}
         </span>
       </div>
       <p className="description">{data.body}</p>

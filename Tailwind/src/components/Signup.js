@@ -9,7 +9,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 
 const Signup = () => {
-  const [name, setname] = useState("");
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -19,7 +19,7 @@ const Signup = () => {
     e.preventDefault();
     axios
       .post("http://localhost:5000/api/user/register", {
-        name,
+        username,
         email,
         password,
       })
@@ -55,7 +55,7 @@ const Signup = () => {
                     name="name"
                     type="text"
                     required
-                    onChange={(e) => setname(e.target.value)}
+                    onChange={(e) => setusername(e.target.value)}
                     className="
             block
             w-full

@@ -1,30 +1,112 @@
 import Article from "../models/Article.js";
 
 import ValidateArticle from "../validation/validation_article.js";
-const createArticle = async (req, res) => {
-  try {
-    const article = await Article.create(req.body);
+// const createArticle = async (req, res) => {
+//   try {
+//     const article = await Article.create(req.body);
 
-    res.status(201).json({ article });
-  } catch (error) {
-    res.status(404).json({ msg: "error hai" });
-  }
+//     res.status(201).json({ article });
+//   } catch (error) {
+//     res.status(404).json({ msg: "error hai" });
+//   }
+// };
+const createArticle = async (req, res) => {
+  const newPost = new Article(req.body);
+  newPost.save((err, createdPost) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    return res.status(200).json({
+      post: createdPost,
+    });
+  });
 };
+// const getAllArticle = async (req, res) => {
+//   try {
+//     const articles = await Article.find();
+//     res.status(201).json({ articles });
+//   } catch (err) {
+//     res.status(404).json({ msg: "error in displaying all articles" });
+//   }
+// };
 const getAllArticle = async (req, res) => {
-  try {
-    const articles = await Article.find();
-    res.status(201).json({ articles });
-  } catch (err) {
-    res.status(404).json({ msg: "error in displaying all articles" });
+  const username = req.query.user;
+  // const category = req.query.category;
+
+  if (username) {
+    Article.find({ username })
+      .then((post, err) => {
+        if (err) {
+          return res.status(400).json({
+            errorInFind: err,
+          });
+        }
+        return res.status(200).json(post);
+      })
+      .catch((err) => {
+        return res.status(400).json({
+          error: "Post not found",
+        });
+      });
+  }
+  // else if (category) {
+  //   Post.find({
+  //     categories: {
+  //       $in: [category],
+  //     },
+  //   })
+  //     .then((post, err) => {
+  //       if (err) {
+  //         return res.status(400).json({
+  //           errorInFind: err,
+  //         });
+  //       }
+  //       return res.status(200).json(post);
+  //     })
+  //     .catch((err) => {
+  //       return res.status(400).json(err);
+  //     });
+  // }
+  else {
+    Article.find()
+      .then((post, err) => {
+        if (err) {
+          return res.status(400).json({
+            errorInAllPost: err,
+          });
+        }
+        return res.status(200).json(post);
+      })
+      .catch((err) => {
+        return res.status(400).json(err);
+      });
   }
 };
+// const getById = async (req, res) => {
+//   try {
+//     const articlebyid = await Article.findById(req.params.id);
+//     res.status(201).json({ articlebyid });
+//   } catch (error) {
+//     res.status(404).json({ notfound: "can not find article by this id" });
+//   }
+// };
 const getById = async (req, res) => {
-  try {
-    const articlebyid = await Article.findById(req.params.id);
-    res.status(201).json({ articlebyid });
-  } catch (error) {
-    res.status(404).json({ notfound: "can not find article by this id" });
-  }
+  Article.findById(req.params.id)
+    .then((foundPost, err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      return res.status(200).json(foundPost);
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        error: "Post not found",
+      });
+    });
 };
 const deleteArticle = async (req, res) => {
   try {

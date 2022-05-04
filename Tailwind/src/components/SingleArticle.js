@@ -22,7 +22,7 @@ const SingleArticle = () => {
       setTitle(res.data.title);
       setbody(res.data.body);
       console.log(res.data);
-      // console.log(res.data.title);
+      console.log(res.data.title);
       // console.log(res.data.body);
     };
     window.scrollTo(0, 0);
@@ -53,27 +53,18 @@ const SingleArticle = () => {
   const ImageLink = "http://localhost:5000/images/";
   return (
     <div>
-      {post.image && (
-        <img
-          className="postImage"
-          src={ImageLink + post.image + ".jpg"}
-          alt="mmmmmmm"
-        />
-      )}
-      <h1 className="postTitle">Title{title}</h1>
-      <div className="PostInfo">
-        <span>
-          Author :
-          <Link to={`/?user=${post.name}`} className="link">
-            <b className="author">{post.name}</b>
-          </Link>
-        </span>
-        <span className="Date">{new Date(post.created_at).toDateString()}</span>
+      <div>
+        {post.image && (
+          <img
+            className="postImage"
+            src={ImageLink + post.image + ".jpg"}
+            alt="mmmmmmm"
+          />
+        )}
       </div>
-      {/* <Navbar /> */}
       <h1 className="postTitle">
         {title}
-        {user?.name === post.name && (
+        {user?.username === post.username && (
           <div className="EditButtons">
             <i
               className="editIcon far fa-edit"
@@ -83,6 +74,16 @@ const SingleArticle = () => {
           </div>
         )}
       </h1>
+      <div className="PostInfo">
+        <span>
+          Author :
+          <Link to={`/?user=${post.username}`} className="link">
+            <b className="author">{post.username}</b>
+          </Link>
+        </span>
+        <span className="Date">{new Date(post.createdAt).toDateString()}</span>
+      </div>
+      <div className="postDescription">{body}</div>
     </div>
   );
 };
