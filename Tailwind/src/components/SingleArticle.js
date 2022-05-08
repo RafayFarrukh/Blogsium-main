@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Context } from "../context/Context";
 import Navbar from "./Navbar";
-require("./singlePost.css");
+// require("./singlePost.css");
 const SingleArticle = () => {
   const location = useLocation();
   const path = location.pathname.split("/")[2];
@@ -52,17 +52,17 @@ const SingleArticle = () => {
 
   const ImageLink = "http://localhost:5000/images/";
   return (
-    <div>
+    <div className=" items-center mx-96 my-24  max-w-2xl bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-200 dark:border-gray-400 shadow">
       <div>
         {post.image && (
           <img
-            className="postImage  block h-auto w-full overflow-hidden rounded-lg shadow-lg"
+            className="postImage  block h-auto w-full"
             src={ImageLink + post.image + ".jpg"}
             alt="mmmmmmm"
           />
         )}
       </div>
-      <h1 className="postTitle no-underline  text-black text-lg font-bold">
+      <h1 className="postTitle  mb-2 text-2xl m-4 font-bold tracking-tight text-gray-900 dark:text-black">
         {title}
         {user?.username === post.username && (
           <div className="EditButtons">
@@ -81,9 +81,11 @@ const SingleArticle = () => {
             <b className="author">{post.username}</b>
           </Link>
         </span>
-        <span className="Date">{new Date(post.createdAt).toDateString()}</span>
+        <span className="Date float-right m-2 text-orange-500">
+          {new Date(post.createdAt).toDateString()}
+        </span>
       </div>
-      <div className="postDescription flex items-center justify-between leading-tight  md:p-4">
+      <div className="postDescription mb-3 m-2 font-normal text-black-700 dark:text-black-400">
         {body}
       </div>
     </div>

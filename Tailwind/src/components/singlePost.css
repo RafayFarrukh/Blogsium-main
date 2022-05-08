@@ -8,12 +8,12 @@
   flex-direction: column;
 }
 
-.postImage {
+/* .postImage {
   width: 100%;
   height: 300px;
   border-radius: 7px;
   object-fit: cover;
-}
+} */
 .postTitle {
   text-align: center;
   margin: 10px;
@@ -26,9 +26,9 @@
   font-family: "Lora", serif;
   font-size: 28px;
   border: none;
-  border-bottom: 1px  solid lightgray;
+  border-bottom: 1px solid lightgray;
 }
-.postTitleEdit:focus{
+.postTitleEdit:focus {
   outline: none;
 }
 .EditButtons {
@@ -71,11 +71,9 @@
   font-weight: 600;
 }
 
-.updateButtonDiv{
-
+.updateButtonDiv {
   display: flex;
   flex-direction: column;
- 
 }
 
 .postDescriptionEdit {
@@ -88,11 +86,11 @@
   height: 100px;
 }
 
-.postDescriptionEdit:focus{
+.postDescriptionEdit:focus {
   outline: none;
 }
 
-.updatePostButton{
+.updatePostButton {
   border: none;
   background-color: teal;
   padding: 5px;
@@ -104,9 +102,9 @@
   margin-top: 20px;
 }
 
-.discardPostButton{
+.discardPostButton {
   border: none;
-  background-color:tomato;
+  background-color: tomato;
   padding: 5px;
   width: 100px;
   color: white;
@@ -115,4 +113,3 @@
   align-self: flex-end;
   margin-top: 20px;
 }
-

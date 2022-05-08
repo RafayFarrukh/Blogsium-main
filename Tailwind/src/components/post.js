@@ -3,7 +3,7 @@ const { Link } = require("react-router-dom");
 const Post = ({ data }) => {
   const ImageLink = "http://localhost:5000/images/";
   return (
-    <div className="my-1 px-1 w-full md:w-1/2 lg:my-12 lg:px-20 lg:w-1/2 lg:h-1/2 container my-40 mx-auto px-4 md:px-12">
+    <div className="my-1 px-1 w-full md:w-1/2 lg:my-12 lg:px-20 lg:w-1/2 lg:h-1/2 container  mx-auto px-4 md:px-12">
       <div className="Posts overflow-hidden rounded-lg shadow-lg">
         {data.image && (
           <img
